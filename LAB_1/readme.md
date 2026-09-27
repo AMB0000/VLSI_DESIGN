@@ -25,9 +25,9 @@ One LSB is 156.25 mV and full scale (11111) is 4.84375 V.
 
 > MISSING: screenshot of dac5{sch}, the full ladder
 
-![r2r_seg schematic](images/r2r_seg_sch.png)
+![r2r_seg schematic](images/images/r2r_seg_sch.png)
 
-![r2r_seg icon](images/r2r_seg_icon.png)
+![r2r_seg icon](images/images/r2r_seg_icon.png)
 
 ## Output resistance
 
@@ -48,9 +48,9 @@ Two ways to confirm this in simulation:
 
 > MISSING: R_out extraction on dac5. r2r_seg_tb below is the single slice check, not the full ladder.
 
-![r2r_seg slice testbench, schematic](images/r2r_seg_tb_sch.png)
+![r2r_seg slice testbench, schematic](images/images/r2r_seg_tb_sch.png)
 
-![r2r_seg slice testbench, layout](images/r2r_seg_tb_lay.png)
+![r2r_seg slice testbench, layout](images/images/r2r_seg_tb_lay.png)
 
 ## Delay driving a 10 pF load
 
@@ -80,7 +80,7 @@ With only B4 high the settled output is 5 × 16 / 32 = 2.5 V, so the 50 % crossi
 
 I measured the delay in the waveform viewer from the 50 % point of the B4 edge to the 1.25 V crossing of aout. The measured value agrees with 0.7RC, which is expected given the single pole behavior. Whatever small excess remains comes from the n-well to substrate junction capacitance of the resistors themselves, which adds to the 10 pF sitting on the output node.
 
-![dac5_tran testbench](images/dac5_tran_tb.png)
+![dac5_tran testbench](images/images/dac5_tran_tb.png)
 
 > MISSING: the transient waveform itself. Also note this testbench still pulses to 2 V with B0 unconnected.
 
@@ -101,7 +101,7 @@ Testbench dac5_dc ties each bit to ground or to a 5 V source and runs an operati
 
 Every code lands on its ideal value. A miswired slice would show up as a large error in the bits at and below that slice while the higher bits stayed correct, so this sweep is also a quick way to localize a mistake.
 
-![dac5_dc testbench](images/dac5_dc_tb.png)
+![dac5_dc testbench](images/images/dac5_dc_tb.png)
 
 > MISSING: the operating point output window
 
@@ -122,7 +122,7 @@ With R_L = R_out = 10 kΩ that factor is exactly one half, at every code.
 
 Because the attenuation is the same constant at every code, the transfer curve stays linear and monotonic and simply loses half its full scale range. The LSB shrinks to 78.1 mV, which costs noise margin but not linearity. A nonlinear load would not be so forgiving, since the factor would vary with output level and produce real distortion. This also gives an independent check on the output resistance: 10 kΩ × (0.46875 / 0.234375 − 1) = 10 kΩ. In practice I would drive any load this heavy through a unity gain buffer so the ladder only ever sees a high impedance node.
 
-![dac5_rload testbench](images/dac5_rload_tb.png)
+![dac5_rload testbench](images/images/dac5_rload_tb.png)
 
 > MISSING: the operating point output with the load
 
@@ -148,7 +148,7 @@ The important consequence is that this single geometry is used everywhere. Becau
 
 Two n-well specific effects are worth noting. The well forms a reverse biased junction with the substrate, so the depletion region widens as the resistor voltage rises and the conducting cross section shrinks, giving the n-well resistor a real voltage coefficient. That same junction is the parasitic capacitance mentioned above. Both are tolerable here because the ladder nodes sit in a similar voltage range and 5 bits is a modest accuracy target.
 
-![n-well resistor layout, r_term{lay}](images/r_term_lay.png)
+![n-well resistor layout, r_term{lay}](images/images/r_term_lay.png)
 
 ## DAC layout
 
@@ -158,7 +158,7 @@ Within each slice the three resistors share the same x position and differ only 
 
 Interconnect between resistors is metal 1. Metal 2 is used only where a bit input line has to cross the ladder without shorting to it. All inputs and outputs, B4 through B0 plus aout and gnd, are exported on metal 1.
 
-![r2r_seg layout](images/r2r_seg_lay.png)
+![r2r_seg layout](images/images/r2r_seg_lay.png)
 
 > MISSING: screenshot of dac5{lay}
 
