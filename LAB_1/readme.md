@@ -168,7 +168,5 @@ I ran DRC from the bottom of the hierarchy upward: the resistor cell first, then
 
 I then ran NCC comparing dac5 schematic against dac5 layout. The two match on networks, device count, and device sizes, so the layout implements the circuit I simulated.
 
-> MISSING: DRC results window
 
-> MISSING: NCC results window
 
