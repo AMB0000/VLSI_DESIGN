@@ -12,15 +12,11 @@ I kept the pad as simple as possible. pad{sch} holds one Off-Page connector expo
 
 The icon, pad{ic}, is a box with the inout port on its left edge.
 
-MISSING: screenshot of pad{sch}
-
 ### DAC
 
 I reused the Lab 1 converter unchanged, so the full design and simulation write-up is in that report. In short: five r_divider slices are stacked from b4 at the top to b0 at the bottom, and the bottom slice ends in one 10 kΩ n-well resistor (W = 14λ, L = 164λ) to ground, which completes the 2R termination. Each slice is a 2R leg (two 10 kΩ in series) from its bit input to the ladder node and one R down to the next slice.
 
 Because the ladder is purely resistive, the bit inputs drive it directly and it has no VDD connection. That leaves seven signals that have to leave the die: the inputs b0 to b4 (b4 is the MSB), the output vout, and gnd. All seven are exported on dac{sch}, dac{ic} and dac{lay}.
-
-MISSING: screenshot of dac{sch}
 
 ### How many pads
 
@@ -29,8 +25,6 @@ Seven signals means at least seven pads. The lab also wants the frame square, an
 ### Padframe
 
 In padframe{sch} I placed the pad icon once as an 8-wide array, pad[1:8], and tied it with one bus to the export pin[1:8]. An array saves me from drawing eight separate pads and eight separate wires. The padframe icon has that single bus port.
-
-MISSING: screenshot of padframe{sch}
 
 ### Top level
 
@@ -47,37 +41,21 @@ ic{sch} puts the dac icon next to the padframe icon. To connect a DAC pin to a p
 | pin[7] | bottom, right | b2 |
 | pin[8] | right side, lower | b3 |
 
-MISSING: screenshot of ic{sch}
-
 ## Layout
 
 ### Pad cell
 
 pad{lay} is three layers centered on the same point. The outer artwork box is 400λ (120 µm) on a side and marks the pad boundary. Inside it is a 244λ Metal-2 / Metal-3 contact, which is the metal the bond wire actually lands on. On top of that is a 200λ (60 µm) passivation node, the hole in the overglass. I made the metal 22λ bigger than the hole on each side so the edge of the opening never falls on bare oxide. The inout export sits on the contact.
 
-MISSING: screenshot of pad{lay}
-
 ### Padframe
 
 padframe{lay} has the eight pads arranged two to a side around a 1200λ square. Since the pads are 400λ wide and spaced 400λ apart, the two pads on each side touch edge to edge. The corners stay empty and the middle is open, which is where the converter goes. The exports pin[1] to pin[8] follow the same counterclockwise order as the table above, so they line up with the icon.
-
-MISSING: screenshot of padframe{lay}
 
 ### Top level
 
 In ic{lay} I placed the padframe and the converter layout, with the converter turned 90° to fit the cavity. To wire a DAC pin out I start on Metal-1 (5λ wide) at the pin, go up through a Metal-1 / Metal-2 contact, and finish on Metal-2 (13λ wide) into the pad. The jump to Metal-2 is needed because the pad is made of Metal-2 and Metal-3 and has no Metal-1 to land on.
 
 The padframe instance covers the whole die, so with normal selection every click inside the ring would grab it instead of the converter or a wire. I unchecked Easy to Select on it, and when I need to touch the padframe itself I switch to special select.
-
-MISSING: screenshot of ic{lay}
-
-MISSING: 3D view of ic{lay}
-
-## DRC and LVS
-
-MISSING: screenshot of the DRC result on ic{lay} showing zero errors
-
-MISSING: screenshot of the NCC result comparing ic{sch} against ic{lay}
 
 ## Files
 
