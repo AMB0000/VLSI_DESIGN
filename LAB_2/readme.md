@@ -2,7 +2,7 @@
 
 Ali Behbehani, VLSI, University of Denver, Fall 2026
 
-Electric VLSI, mocmos, λ = 300 nm, 3 metal layers. I took the R-2R converter from Lab 1 and gave it a way off the chip: eight bonding pads in a square ring with the converter in the middle.
+Electric VLSI, mocmos, 300 nm scale, 3 metal layers. I took the R-2R converter from Lab 1 and gave it a way off the chip: eight bonding pads in a square ring with the converter in the middle.
 
 ## Schematic
 
@@ -51,13 +51,13 @@ ic{sch} puts the dac icon next to the padframe icon. I connect a DAC pin to a pa
 
 ### Pad
 
-pad{lay} is three layers on the same center: a 400λ artwork box for the boundary, a 244λ Metal-2 / Metal-3 contact where the bond wire lands, and a 200λ passivation opening. The metal is 22λ bigger than the hole on each side so the edge of the opening never falls on bare oxide.
+pad{lay} is three layers on the same center: a 120 µm artwork box for the boundary, a 73.2 µm Metal-2 / Metal-3 contact where the bond wire lands, and a 60 µm passivation opening. The metal is 6.6 µm bigger than the hole on each side so the edge of the opening never falls on bare oxide.
 
 <img src="pictures/images/pad_lay.png" width="300">
 
 ### Padframe
 
-padframe{lay} is the eight pads, two to a side, around a 1600λ square. Pads are 400λ wide and 400λ apart, so the two on each side touch edge to edge. The corners stay empty and the middle is open for the converter.
+padframe{lay} is the eight pads, two to a side, around a 480 µm square. Pads are 120 µm wide and 120 µm apart, so the two on each side touch edge to edge. The corners stay empty and the middle is open for the converter.
 
 <img src="pictures/images/padframe_lay.png" width="420">
 
