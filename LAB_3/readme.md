@@ -1,6 +1,6 @@
 # NMOS with ESD Pad Protection
 
-Ali Behbehani, VLSI, University of Denver, Fall 2026
+Ali Behbehani, VLSI-DESIGN, University of Denver, Fall 2026
 
 Electric VLSI, mocmos, 300 nm scale, 3 metal layers. I put the NMOS from Tutorial 3 on a die with eight pads. I made two versions: one with plain pads and one where every pad has two ESD diodes.
 
