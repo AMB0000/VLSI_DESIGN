@@ -166,4 +166,4 @@ Tools > NCC > Schematic and Layout Views of Cell in Current Window on final_ic_e
 | lab3done/C5_models.txt | Transistor models for the NMOS_IV spice card |
 | pictures/ | Screenshots |
 
-The NMOS_IV spice card includes C5_models.txt by name, so both files have to sit in the same folder. The library uses 300 nm, 3 metal layers and analog mode. When Electric asks about project preferences on opening it, pick Use All New Settings.
+
