@@ -1,0 +1,27 @@
+*** SPICE deck for cell simDelay_NAND{sch} from library lab_5_full_adder
+*** Created on Mon Nov 02, 2026 22:18:01
+*** Last revised on Mon Nov 02, 2026 22:18:01
+*** Written on Mon Nov 02, 2026 22:18:02 by Electric VLSI Design System, version 9.07
+*** Layout tech: mocmos, foundry MOSIS
+*** UC SPICE *** , MIN_RESIST 4.0, MIN_CAPAC 0.1FF
+
+*** SUBCIRCUIT lab_5_full_adder__NAND_2 FROM CELL lab_5_full_adder:NAND_2{sch}
+.SUBCKT lab_5_full_adder__NAND_2 A B Y
+** GLOBAL vdd
+Mnmos@0 Y A vdd vdd PMOS L=0.6U W=1.8U
+Mnmos@1 Y B vdd vdd PMOS L=0.6U W=1.8U
+Mnmos@2 Y A net@8 0 NMOS L=0.6U W=1.8U
+Mnmos@3 net@8 B 0 0 NMOS L=0.6U W=1.8U
+.ENDS lab_5_full_adder__NAND_2
+
+.global vdd
+
+*** TOP LEVEL CELL: lab_5_full_adder:simDelay_NAND{sch}
+XNAND_2@0 d_in vdd nand_d_out lab_5_full_adder__NAND_2
+
+* Spice Code nodes in cell cell 'lab_5_full_adder:simDelay_NAND{sch}'
+vdd vdd 0 dc 5
+vin d_in 0 pulse(0v 5v 10n 1n 1n 40n 40n)
+.tran 0 40n
+.include C5_models.txt
+.END

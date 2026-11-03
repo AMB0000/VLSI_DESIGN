@@ -1,0 +1,25 @@
+*** SPICE deck for cell simDelay_NOT{sch} from library lab_5_full_adder
+*** Created on Mon Nov 02, 2026 22:18:01
+*** Last revised on Mon Nov 02, 2026 22:18:01
+*** Written on Mon Nov 02, 2026 22:18:02 by Electric VLSI Design System, version 9.07
+*** Layout tech: mocmos, foundry MOSIS
+*** UC SPICE *** , MIN_RESIST 4.0, MIN_CAPAC 0.1FF
+
+*** SUBCIRCUIT lab_5_full_adder__NOT FROM CELL lab_5_full_adder:NOT{sch}
+.SUBCKT lab_5_full_adder__NOT A Y
+** GLOBAL vdd
+Mnmos@0 Y A vdd vdd PMOS L=0.6U W=1.8U
+Mnmos@1 Y A 0 0 NMOS L=0.6U W=1.8U
+.ENDS lab_5_full_adder__NOT
+
+.global vdd
+
+*** TOP LEVEL CELL: lab_5_full_adder:simDelay_NOT{sch}
+XNOT@0 d_in not_d_out lab_5_full_adder__NOT
+
+* Spice Code nodes in cell cell 'lab_5_full_adder:simDelay_NOT{sch}'
+vdd vdd 0 dc 5
+vin d_in 0 pulse(0v 5v 10n 1n 1n 40n 40n)
+.tran 0 40n
+.include C5_models.txt
+.END
