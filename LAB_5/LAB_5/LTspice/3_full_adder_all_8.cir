@@ -1,0 +1,56 @@
+*** SPICE deck for cell simulations_adder_full{sch} from library lab_5_full_adder
+*** Created on Mon Nov 02, 2026 22:18:01
+*** Last revised on Mon Nov 02, 2026 22:18:01
+*** Written on Mon Nov 02, 2026 22:18:02 by Electric VLSI Design System, version 9.07
+*** Layout tech: mocmos, foundry MOSIS
+*** UC SPICE *** , MIN_RESIST 4.0, MIN_CAPAC 0.1FF
+
+*** SUBCIRCUIT lab_5_full_adder__NAND_2 FROM CELL lab_5_full_adder:NAND_2{sch}
+.SUBCKT lab_5_full_adder__NAND_2 A B Y
+** GLOBAL vdd
+Mnmos@0 Y A vdd vdd PMOS L=0.6U W=1.8U
+Mnmos@1 Y B vdd vdd PMOS L=0.6U W=1.8U
+Mnmos@2 Y A net@8 0 NMOS L=0.6U W=1.8U
+Mnmos@3 net@8 B 0 0 NMOS L=0.6U W=1.8U
+.ENDS lab_5_full_adder__NAND_2
+
+*** SUBCIRCUIT lab_5_full_adder__XOR_2 FROM CELL lab_5_full_adder:XOR_2{sch}
+.SUBCKT lab_5_full_adder__XOR_2 A B Y
+** GLOBAL vdd
+Mnmos@0 notA_out A vdd vdd PMOS L=0.6U W=1.8U
+Mnmos@1 notA_out A 0 0 NMOS L=0.6U W=1.8U
+Mnmos@2 notB_out B vdd vdd PMOS L=0.6U W=1.8U
+Mnmos@3 notB_out B 0 0 NMOS L=0.6U W=1.8U
+Mnmos@4 net@25 A vdd vdd PMOS L=0.6U W=1.8U
+Mnmos@5 Y notB_out net@25 vdd PMOS L=0.6U W=1.8U
+Mnmos@6 net@26 B vdd vdd PMOS L=0.6U W=1.8U
+Mnmos@7 Y notA_out net@26 vdd PMOS L=0.6U W=1.8U
+Mnmos@8 Y A net@27 0 NMOS L=0.6U W=1.8U
+Mnmos@9 net@27 B 0 0 NMOS L=0.6U W=1.8U
+Mnmos@10 Y notB_out net@28 0 NMOS L=0.6U W=1.8U
+Mnmos@11 net@28 notA_out 0 0 NMOS L=0.6U W=1.8U
+.ENDS lab_5_full_adder__XOR_2
+
+*** SUBCIRCUIT lab_5_full_adder__full_adder FROM CELL lab_5_full_adder:full_adder{sch}
+.SUBCKT lab_5_full_adder__full_adder A B Cin Cout S
+** GLOBAL vdd
+XNAND_2@0 A B net@17 lab_5_full_adder__NAND_2
+XNAND_2@1 Cin net@12 net@18 lab_5_full_adder__NAND_2
+XNAND_2@2 net@18 net@17 Cout lab_5_full_adder__NAND_2
+XXOR_2@0 A B net@12 lab_5_full_adder__XOR_2
+XXOR_2@1 Cin net@12 S lab_5_full_adder__XOR_2
+.ENDS lab_5_full_adder__full_adder
+
+.global vdd
+
+*** TOP LEVEL CELL: lab_5_full_adder:simulations_adder_full{sch}
+Xfull_add@0 a b cin cout s lab_5_full_adder__full_adder
+
+* Spice Code nodes in cell cell 'lab_5_full_adder:simulations_adder_full{sch}'
+vdd vdd 0 dc 5
+va a 0 pulse(0v 5v 0n 1n 1n 80n 160n)
+vb b 0 pulse(0v 5v 0n 1n 1n 40n 80n)
+vcin cin 0 pulse(0v 5v 0n 1n 1n 20n 40n)
+.tran 0 160n 0 100p
+.include C5_models.txt
+.END
