@@ -1,0 +1,93 @@
+* ngspice copy of accumulatorA_sim_lay.spi. Only change: .tran 10p 240n (ngspice needs a step above 0).
+*** Created on Sat Nov 07, 2026 23:56:38
+*** Last revised on Sat Nov 07, 2026 23:56:38
+*** Written on Sun Nov 08, 2026 19:35:18 by Electric VLSI Design System, version 9.07
+*** Layout tech: mocmos, foundry MOSIS
+
+*** SUBCIRCUIT muddLib07__inv_1x FROM CELL muddLib07:inv_1x{lay}
+.SUBCKT muddLib07__inv_1x a gnd vdd y
+Mnmos@0 y a gnd gnd N L=0.6U W=2.1U AS=6.03P AD=3.825P PS=16.8U PD=8.1U
+Mpmos@0 y a vdd vdd P L=0.6U W=3U AS=7.38P AD=3.825P PS=18.6U PD=8.1U
+.ENDS muddLib07__inv_1x
+
+*** SUBCIRCUIT muddLib07__nand2_1x FROM CELL muddLib07:nand2_1x{lay}
+.SUBCKT muddLib07__nand2_1x a b gnd vdd y
+Mnmos@0 y b net@66 gnd N L=0.6U W=3.6U AS=1.958P AD=3.96P PS=5.25U PD=7U
+Mnmos@1 net@66 a gnd gnd N L=0.6U W=3.6U AS=9.72P AD=1.958P PS=24.6U PD=5.25U
+Mpmos@0 vdd b y vdd P L=0.6U W=3.6U AS=3.96P AD=7.56P PS=7U PD=17.4U
+Mpmos@1 y a vdd vdd P L=0.6U W=3.6U AS=7.56P AD=3.96P PS=17.4U PD=7U
+.ENDS muddLib07__nand2_1x
+
+*** SUBCIRCUIT muddLib07__nand3_1x FROM CELL muddLib07:nand3_1x{lay}
+.SUBCKT muddLib07__nand3_1x a b c gnd vdd y
+Mnmos@6 net@177 a gnd gnd N L=0.6U W=4.8U AS=12.96P AD=2.498P PS=31.8U PD=6.45U
+Mnmos@7 net@178 b net@177 gnd N L=0.6U W=4.8U AS=2.498P AD=2.498P PS=6.45U PD=6.45U
+Mnmos@8 y c net@178 gnd N L=0.6U W=4.8U AS=2.498P AD=5.018P PS=6.45U PD=8.7U
+Mpmos@6 y c vdd vdd P L=0.6U W=3.9U AS=6.21P AD=5.018P PS=13.8U PD=8.7U
+Mpmos@7 vdd b y vdd P L=0.6U W=3.9U AS=5.018P AD=6.21P PS=8.7U PD=13.8U
+Mpmos@8 y a vdd vdd P L=0.6U W=3.9U AS=6.21P AD=5.018P PS=13.8U PD=8.7U
+.ENDS muddLib07__nand3_1x
+
+*** SUBCIRCUIT accumulatorA__dff FROM CELL accumulatorA:dff{lay}
+.SUBCKT accumulatorA__dff clk D gnd Q Qb R vdd
+Xinv_1x@0 R gnd vdd net@12 muddLib07__inv_1x
+Xnand2_1x@0 net@34 net@22 gnd vdd net@19 muddLib07__nand2_1x
+Xnand2_1x@1 net@22 Qb gnd vdd Q muddLib07__nand2_1x
+Xnand3_1x@0 net@19 net@12 clk gnd vdd net@22 muddLib07__nand3_1x
+Xnand3_1x@1 net@22 clk net@34 gnd vdd net@29 muddLib07__nand3_1x
+Xnand3_1x@2 net@29 net@12 D gnd vdd net@34 muddLib07__nand3_1x
+Xnand3_1x@3 Q net@29 net@12 gnd vdd Qb muddLib07__nand3_1x
+.ENDS accumulatorA__dff
+
+*** SUBCIRCUIT muddLib07__invtri_c_1x FROM CELL muddLib07:invtri_c_1x{lay}
+.SUBCKT muddLib07__invtri_c_1x d en gnd vdd y
+Mnmos@0 gnd en net@223 gnd N L=0.6U W=1.8U AS=3.375P AD=6.3P PS=7.5U PD=15.6U
+Mnmos@3 net@236 en gnd gnd N L=0.6U W=4.2U AS=6.3P AD=2.228P PS=15.6U PD=5.85U
+Mnmos@4 y d net@236 gnd N L=0.6U W=4.2U AS=2.228P AD=7.65P PS=5.85U PD=13.2U
+Mpmos@0 vdd en net@223 vdd P L=0.6U W=2.7U AS=3.375P AD=7.785P PS=7.5U PD=17.4U
+Mpmos@1 net@81 net@223 vdd vdd P L=0.6U W=6U AS=7.785P AD=3.038P PS=17.4U PD=7.65U
+Mpmos@2 y d net@81 vdd P L=0.6U W=6U AS=3.038P AD=7.65P PS=7.65U PD=13.2U
+.ENDS muddLib07__invtri_c_1x
+
+*** SUBCIRCUIT accumulatorA__accumulatorA FROM CELL accumulatorA:accumulatorA{lay}
+.SUBCKT accumulatorA__accumulatorA A[3] A[2] A[1] A[0] AluA[3] AluA[2] AluA[1] AluA[0] ClearA EnableA gnd IB[3] IB[2] IB[1] IB[0] LatchA MainClock vdd
+Xdff@0 net@42 A[0] gnd AluA[0] net@18 net@51 vdd accumulatorA__dff
+Xdff@1 net@42 A[1] gnd AluA[1] net@24 net@51 vdd accumulatorA__dff
+Xdff@2 net@42 A[2] gnd AluA[2] net@30 net@51 vdd accumulatorA__dff
+Xdff@3 net@42 A[3] gnd AluA[3] net@36 net@51 vdd accumulatorA__dff
+Xinv_1x@0 ClearA gnd vdd net@51 muddLib07__inv_1x
+Xinvtri_c@0 net@18 EnableA gnd vdd IB[0] muddLib07__invtri_c_1x
+Xinvtri_c@1 net@24 EnableA gnd vdd IB[1] muddLib07__invtri_c_1x
+Xinvtri_c@2 net@30 EnableA gnd vdd IB[2] muddLib07__invtri_c_1x
+Xinvtri_c@3 net@36 EnableA gnd vdd IB[3] muddLib07__invtri_c_1x
+Xnand2_1x@0 LatchA MainClock gnd vdd net@42 muddLib07__nand2_1x
+.ENDS accumulatorA__accumulatorA
+
+*** TOP LEVEL CELL: accumulatorA:accumulatorA_sim{lay}
+Xaccumula@0 A[3] A[2] A[1] A[0] AluA[3] AluA[2] AluA[1] AluA[0] ClearA EnableA gnd IB[3] IB[2] IB[1] IB[0] LatchA MainClock vdd accumulatorA__accumulatorA
+
+* Spice Code nodes in cell cell 'accumulatorA:accumulatorA_sim{lay}'
+vdd vdd 0 DC 5
+vclk mainclock 0 pulse(0 5 5n 0.1n 0.1n 10n 20n)
+va3 a[3] 0 pwl(0 5 70n 5 70.1n 0)
+va2 a[2] 0 pwl(0 0 70n 0 70.1n 5)
+va1 a[1] 0 pwl(0 5 70n 5 70.1n 0)
+va0 a[0] 0 pwl(0 0 70n 0 70.1n 5)
+vlatch latcha 0 pwl(0 5 60n 5 60.1n 0 100n 0 100.1n 5)
+vclear cleara 0 pwl(0 5 140n 5 140.1n 0 160n 0 160.1n 5)
+venable enablea 0 pwl(0 5 200n 5 200.1n 0)
+vhalf half 0 DC 2.5
+rib3 ib[3] half 100k
+rib2 ib[2] half 100k
+rib1 ib[1] half 100k
+rib0 ib[0] half 100k
+.include cmosedu_layout.txt
+.tran 10p 240n
+.control
+run
+plot v(mainclock) v(latcha)
+plot v(cleara) v(enablea)
+plot v(alua[3]) v(alua[2]) v(alua[1]) v(alua[0])
+plot v(ib[3]) v(ib[2]) v(ib[1]) v(ib[0])
+.endc
+.end

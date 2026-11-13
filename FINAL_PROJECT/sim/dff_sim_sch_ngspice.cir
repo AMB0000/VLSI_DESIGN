@@ -1,0 +1,68 @@
+* ngspice copy of dff_sim_sch.spi. Only change: .tran 10p 120n (ngspice needs a step above 0).
+*** Created on Sat Nov 07, 2026 23:56:35
+*** Last revised on Sat Nov 07, 2026 23:56:35
+*** Written on Sun Nov 08, 2026 19:35:18 by Electric VLSI Design System, version 9.07
+*** Layout tech: mocmos, foundry MOSIS
+
+*** SUBCIRCUIT muddLib07__inv_1x FROM CELL muddLib07:inv_1x{sch}
+.SUBCKT muddLib07__inv_1x a y
+** GLOBAL gnd
+** GLOBAL vdd
+Mnmos@0 y a gnd gnd N_1u L=0.6U W=2.1U
+Mpmos@0 vdd a y vdd P_1u L=0.6U W=3U
+.ENDS muddLib07__inv_1x
+
+*** SUBCIRCUIT muddLib07__nand2_1x FROM CELL muddLib07:nand2_1x{sch}
+.SUBCKT muddLib07__nand2_1x a b y
+** GLOBAL gnd
+** GLOBAL vdd
+Mnmos@0 y b net@5 gnd N_1u L=0.6U W=3.6U
+Mnmos@1 net@5 a gnd gnd N_1u L=0.6U W=3.6U
+Mpmos@0 vdd b y vdd P_1u L=0.6U W=3.6U
+Mpmos@1 vdd a y vdd P_1u L=0.6U W=3.6U
+.ENDS muddLib07__nand2_1x
+
+*** SUBCIRCUIT muddLib07__nand3_1x FROM CELL muddLib07:nand3_1x{sch}
+.SUBCKT muddLib07__nand3_1x a b c y
+** GLOBAL gnd
+** GLOBAL vdd
+Mnmos@0 net@4 b net@15 gnd N_1u L=0.6U W=4.8U
+Mnmos@1 y c net@4 gnd N_1u L=0.6U W=4.8U
+Mnmos@2 net@15 a gnd gnd N_1u L=0.6U W=4.8U
+Mpmos@0 vdd c y vdd P_1u L=0.6U W=3.9U
+Mpmos@1 vdd b y vdd P_1u L=0.6U W=3.9U
+Mpmos@2 vdd a y vdd P_1u L=0.6U W=3.9U
+.ENDS muddLib07__nand3_1x
+
+*** SUBCIRCUIT accumulatorA__dff FROM CELL accumulatorA:dff{sch}
+.SUBCKT accumulatorA__dff clk D Q Qb R
+** GLOBAL gnd
+** GLOBAL vdd
+Xinv_1x@0 R clrb muddLib07__inv_1x
+Xnand2_1x@0 n4 n2 n1 muddLib07__nand2_1x
+Xnand2_1x@1 n2 Qb Q muddLib07__nand2_1x
+Xnand3_1x@0 n1 clrb clk n2 muddLib07__nand3_1x
+Xnand3_1x@1 n2 clk n4 n3 muddLib07__nand3_1x
+Xnand3_1x@2 n3 clrb D n4 muddLib07__nand3_1x
+Xnand3_1x@3 Q n3 clrb Qb muddLib07__nand3_1x
+.ENDS accumulatorA__dff
+
+.global gnd vdd
+
+*** TOP LEVEL CELL: accumulatorA:dff_sim{sch}
+Xdff@0 clk d q qb r accumulatorA__dff
+
+* Spice Code nodes in cell cell 'accumulatorA:dff_sim{sch}'
+vdd vdd 0 DC 5
+vclk clk 0 pulse(0 5 10n 0.1n 0.1n 10n 20n)
+vd d 0 pwl(0 0 25n 0 25.1n 5 95n 5 95.1n 0)
+vr r 0 pwl(0 0 52n 0 52.1n 5 56n 5 56.1n 0)
+.include cmosedu_models.txt
+.tran 10p 120n
+.control
+run
+plot v(clk) v(d)
+plot v(r)
+plot v(q) v(qb)
+.endc
+.end
